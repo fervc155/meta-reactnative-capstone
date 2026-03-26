@@ -16,7 +16,11 @@ import {
   Button,
 } from "../components/AppUI";
 
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+
 export default function LoginScreen() {
+  const { login } = useContext(AuthContext);
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState({});
@@ -53,7 +57,11 @@ export default function LoginScreen() {
 
   const handleNext = () => {
     if (isValid) {
-      console.log("Valid data:", { firstName, email });
+      console.log(" valido pal login");
+      login({ firstName, email });
+      setIsValid(false);
+    } else {
+      console.log("no valido");
     }
   };
 

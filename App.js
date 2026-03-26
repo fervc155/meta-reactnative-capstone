@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./navigation/RootNavigator";
 import { View, ActivityIndicator } from "react-native";
 import useAppFonts from "./hooks/useFonts";
+import { AuthProvider } from "./context/AuthContext"; // 👈 agrega esto
 
 export default function App() {
   const fontsLoaded = useAppFonts();
@@ -16,8 +17,12 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <AuthProvider>
+      {" "}
+      {/* 👈 envuelve aquí */}
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
