@@ -10,12 +10,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   View,
+  ScrollView,
 } from "react-native";
+import { MaskedTextInput } from "react-native-mask-text";
 
 // =======================
 // COLORS (from style guide)
 // =======================
 const COLORS = {
+  white: "#FFFFFF",
   primary: "#495E57",
   secondary: "#F4CE14",
   background: "#EDEFEE",
@@ -88,6 +91,27 @@ export const Input = ({
   </View>
 );
 
+export const InputPhone = ({
+  value,
+  onChangeText,
+  placeholder,
+  error,
+  ...props
+}) => (
+  <View style={{ width: "100%" }}>
+    <MaskedTextInput
+      mask="(999) 999-9999"
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={placeholder}
+      keyboardType="phone-pad"
+      style={[styles.input, TYPOGRAPHY.body, error && styles.inputError]}
+      {...props}
+    />
+    {error && <Text style={styles.errorText}>{error}</Text>}
+  </View>
+);
+
 // Button
 export const Button = ({ title, onPress, disabled }) => (
   <TouchableOpacity
@@ -109,13 +133,27 @@ export const Section = ({ children, style }) => (
   <View style={[styles.section, style]}>{children}</View>
 );
 
+export const SectionScroll = ({ children, style }) => (
+  <ScrollView
+    keyboardShouldPersistTaps="handled"
+    contentContainerStyle={[styles.sectionScrollContainer, style]}
+  >
+    {children}
+  </ScrollView>
+);
+
 // =======================
 // STYLES
 // =======================
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.white,
+    paddingVertical: 24,
+  },
+  sectionScrollContainer: {
+    padding: 24,
+    backgroundColor: COLORS.surface, // o muted, lo que quieras
   },
   section: {
     flex: 1,

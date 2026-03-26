@@ -14,11 +14,20 @@ export const AuthProvider = ({ children }) => {
     try {
       const user = await AsyncStorage.getItem("user");
       setIsLogged(user ? true : false);
+      return user;
     } catch (e) {
       setIsLogged(false);
+      return false;
     }
   };
 
+  const saveUser = async (user) => {
+    try {
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+    } catch (e) {
+      console.log("no se pudo guardar alv", e);
+    }
+  };
   const login = async (data) => {
     try {
       await AsyncStorage.setItem("user", JSON.stringify(data));
@@ -34,7 +43,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLogged, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLogged, login, logout, checkLogin, saveUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
