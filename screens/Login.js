@@ -34,7 +34,7 @@ export default function LoginScreen() {
       valid = false;
     }
 
-    const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email.trim()) {
       newErrors.email = "Email is required";
       valid = false;
