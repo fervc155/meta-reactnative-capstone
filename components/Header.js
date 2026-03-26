@@ -1,19 +1,31 @@
-import React from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { COLORS } from "./AppUI";
 import Logo from "../assets/images/Logo.png";
 import Avatar from "./Avatar";
-export default function Header({ onBack }) {
+import { AuthContext } from "../context/AuthContext";
+
+export default function Header({ onBack, back = true }) {
+  let [urlImage, setUrlImage] = useState(null);
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    user && setUrlImage(user.imageUri);
+  }, [user]);
+
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={onBack} style={styles.backButton}>
-        <Text style={styles.backArrow}>←</Text>
-      </TouchableOpacity>
+      {back ? (
+        <TouchableOpacity onPress={onBack} style={styles.backButton}>
+          <Text style={styles.backArrow}>←</Text>
+        </TouchableOpacity>
+      ) : (
+        <View> </View>
+      )}
       <View style={styles.logoContainer}>
         <Image source={Logo} style={styles.logoImage} resizeMode="contain" />
         <Text style={styles.logoText}>L I T T L E L E M O N</Text>
       </View>
-      <Avatar size={40} />
+      <Avatar uri={urlImage} size={40} />
     </View>
   );
 }

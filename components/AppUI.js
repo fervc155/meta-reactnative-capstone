@@ -34,9 +34,8 @@ const COLORS = {
 const TYPOGRAPHY = {
   title: {
     fontFamily: "markazi",
-    fontSize: 28,
+    fontSize: 30,
     color: COLORS.text,
-    fontWeight: "bold",
   },
   heading: {
     fontFamily: "markazi",
@@ -63,6 +62,11 @@ const TYPOGRAPHY = {
 // Title
 export const Title = ({ children, style }) => (
   <Text style={[TYPOGRAPHY.title, style]}>{children}</Text>
+);
+
+// Title
+export const Heading = ({ children, style }) => (
+  <Text style={[TYPOGRAPHY.heading, style]}>{children}</Text>
 );
 
 // Label
@@ -142,10 +146,26 @@ export const SectionScroll = ({ children, style }) => (
   </ScrollView>
 );
 
+// En components/UI.js, agrega esto:
+
+export const Body = ({ children, style, numberOfLines }) => (
+  <Text style={[TYPOGRAPHY.body, style]} numberOfLines={numberOfLines}>
+    {children}
+  </Text>
+);
+
+export const Row = ({ children, style }) => {
+  return <View style={[styles.row, style]}>{children}</View>;
+};
+
 // =======================
 // STYLES
 // =======================
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   screen: {
     flex: 1,
     backgroundColor: COLORS.white,
