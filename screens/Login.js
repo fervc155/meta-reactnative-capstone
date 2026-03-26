@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -53,8 +53,15 @@ export default function LoginScreen() {
     setIsValid(valid);
   };
 
+  let starting = useRef(true);
+
   useEffect(() => {
-    validate();
+    if (starting.current) {
+      starting.current = false;
+      return;
+    } else {
+      validate();
+    }
   }, [firstName, email]);
 
   const handleNext = () => {

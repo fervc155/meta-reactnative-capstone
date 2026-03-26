@@ -43,25 +43,24 @@ export default function ProfileScreen() {
 
   const onLogout = () => {
     logout();
-    navigation.navigate("Login");
   };
 
   // Cargar datos al iniciar
   useEffect(() => {
-    const loadUser = async () => {
-      const userData = await checkLogin();
-      if (userData) {
-        const user = JSON.parse(userData);
-        setFirstName(user.firstName || "");
-        setLastName(user.lastName || "");
-        setEmail(user.email || "");
-        setPhone(user.phone || "");
-        setImageUri(user.imageUri || null);
-        setNotifications(user.notifications || notifications);
-      }
-    };
     loadUser();
   }, []);
+  const loadUser = async () => {
+    const userData = await checkLogin();
+    if (userData) {
+      const user = JSON.parse(userData);
+      setFirstName(user.firstName || "");
+      setLastName(user.lastName || "");
+      setEmail(user.email || "");
+      setPhone(user.phone || "");
+      setImageUri(user.imageUri || null);
+      setNotifications(user.notifications || notifications);
+    }
+  };
 
   // Guardar cambios
   const saveProfile = async () => {
