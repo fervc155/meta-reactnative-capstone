@@ -21,36 +21,69 @@ import { fetchMenu } from "../api/menu";
 import MenuFilter from "../components/MenuFilter";
 import MenuItem from "../components/MenuItem";
 import Header from "../components/Header";
-
-const categoryMap = {
-  Starters: ["Greek Salad", "Bruschetta"],
-  Mains: ["Grilled Fish", "Pasta"],
-  Desserts: ["Lemon Dessert"],
-  Drinks: [],
-};
+import { initDB, getMenuFromDB, saveMenuToDB } from "../db";
+import { TextInput, TouchableOpacity } from "react-native";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function HomeScreen() {
+  const [searchText, setSearchText] = useState("");
   const [menu, setMenu] = useState([]);
   const [filteredMenu, setFilteredMenu] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("Starters");
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cats, setCats] = useState([]);
 
   useEffect(() => {
     async function loadMenu() {
       setLoading(true);
-      const data = await fetchMenu();
-      setMenu(data);
-      setLoading(false);
+      try {
+        await initDB(); // inicializa DB
+        let localMenu = await getMenuFromDB();
+
+        if (localMenu.length === 0) {
+          // Si no hay menú local, traer de API y guardar
+          const apiMenu = await fetchMenu();
+          await saveMenuToDB(apiMenu);
+          localMenu = apiMenu;
+        }
+
+        let cats = new Set();
+
+        localMenu.forEach((item) => {
+          cats.add(item.category);
+        });
+
+        setCats(Array.from(cats));
+
+        setMenu(localMenu);
+      } catch (err) {
+        console.error("DB error:", err);
+      } finally {
+        setLoading(false);
+      }
     }
     loadMenu();
   }, []);
 
   useEffect(() => {
-    if (!menu.length) return;
-    const allowedNames = categoryMap[selectedCategory] || [];
-    const filtered = menu.filter((item) => allowedNames.includes(item.name));
+    let filtered = menu;
+
+    // 🔎 filtro por texto
+    if (searchText.trim() !== "") {
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase()),
+      );
+    }
+
+    // 🏷 filtro por categorías (multi)
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter((item) =>
+        selectedCategories.includes(item.category),
+      );
+    }
+
     setFilteredMenu(filtered);
-  }, [selectedCategory, menu]);
+  }, [searchText, selectedCategories, menu]);
 
   const renderItem = ({ item, index }) => {
     const isLastItem = index === filteredMenu.length - 1;
@@ -79,10 +112,23 @@ export default function HomeScreen() {
               />
             </View>
           </Row>
+          <View style={styles.searchContainer}>
+            <TouchableOpacity style={styles.searchIcon}>
+              <FontAwesome name="search" size={24} color="black" />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search menu..."
+              value={searchText}
+              onChangeText={setSearchText}
+            />
+          </View>
         </Section>
+
         <MenuFilter
-          selected={selectedCategory}
-          onSelect={setSelectedCategory}
+          items={cats}
+          selected={selectedCategories}
+          onSelect={setSelectedCategories}
         />
 
         {loading ? (
@@ -92,16 +138,17 @@ export default function HomeScreen() {
         ) : (
           <FlatList
             data={filteredMenu}
-            keyExtractor={(item) => item.id?.toString()}
+            keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
-            scrollEnabled={false} // para que SectionScroll maneje el scroll
-            ItemSeparatorComponent={() => <></>} // opcional si quieres espacio entre items
+            scrollEnabled={false}
+            ItemSeparatorComponent={() => <></>}
           />
         )}
       </SectionScroll>
     </Screen>
   );
 }
+
 const styles = StyleSheet.create({
   hero: {
     backgroundColor: COLORS.primary,
@@ -122,7 +169,7 @@ const styles = StyleSheet.create({
   heroImage: {
     width: "100%",
     height: 160,
-    borderRadius: 16, // bordes redondeados de la imagen
+    borderRadius: 16,
   },
   title: {
     marginBottom: -16,
@@ -142,8 +189,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: COLORS.muted,
   },
-  city: {
-    marginBottom: 16,
-    color: COLORS.muted,
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: COLORS.white,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginVertical: 16,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: COLORS.black,
+  },
+  searchIcon: {
+    marginLeft: 8,
   },
 });

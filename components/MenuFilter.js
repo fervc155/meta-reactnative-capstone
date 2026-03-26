@@ -2,28 +2,37 @@ import React from "react";
 import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Label, COLORS } from "./AppUI";
 
-const categories = ["Starters", "Mains", "Desserts", "Drinks"];
+export default function MenuFilter({ selected, onSelect, items }) {
+  const toggleCategory = (cat) => {
+    if (selected.includes(cat)) {
+      onSelect(selected.filter((c) => c !== cat));
+    } else {
+      onSelect([...selected, cat]);
+    }
+  };
 
-export default function MenuFilter({ selected, onSelect }) {
   return (
     <View style={styles.container}>
-      {categories.map((cat) => (
-        <TouchableOpacity
-          key={cat}
-          style={[styles.button, selected === cat && styles.buttonSelected]}
-          onPress={() => onSelect(cat)}
-          activeOpacity={0.7}
-        >
-          <Label
-            style={{
-              color: selected === cat ? COLORS.primary : COLORS.muted,
-              marginBottom: 0,
-            }}
+      {items.map((cat) => {
+        const isActive = selected.includes(cat);
+
+        return (
+          <TouchableOpacity
+            key={cat}
+            style={[styles.button, isActive && styles.buttonSelected]}
+            onPress={() => toggleCategory(cat)}
           >
-            {cat}
-          </Label>
-        </TouchableOpacity>
-      ))}
+            <Label
+              style={{
+                color: isActive ? COLORS.primary : COLORS.muted,
+                marginBottom: 0,
+              }}
+            >
+              {cat}
+            </Label>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
