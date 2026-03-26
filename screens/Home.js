@@ -24,6 +24,7 @@ import Header from "../components/Header";
 import { initDB, getMenuFromDB, saveMenuToDB } from "../db";
 import { TextInput, TouchableOpacity } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Hero from "../components/Hero";
 
 export default function HomeScreen() {
   const [searchText, setSearchText] = useState("");
@@ -94,24 +95,7 @@ export default function HomeScreen() {
     <Screen>
       <Header back={false} />
       <SectionScroll>
-        <Section style={styles.hero}>
-          <Title style={styles.title}>Little Lemon</Title>
-          <Row>
-            <View style={styles.leftColumn}>
-              <Heading style={styles.heading}>Chicago</Heading>
-              <Body style={styles.description}>
-                We are a family owned Mediterranean restaurant, focused on
-                traditional recipes served with a modern twist.
-              </Body>
-            </View>
-            <View style={styles.rightColumn}>
-              <Image
-                source={require("../assets/images/Hero.png")}
-                style={styles.heroImage}
-                resizeMode="cover"
-              />
-            </View>
-          </Row>
+        <Hero>
           <View style={styles.searchContainer}>
             <TouchableOpacity style={styles.searchIcon}>
               <FontAwesome name="search" size={24} color="black" />
@@ -123,7 +107,7 @@ export default function HomeScreen() {
               onChangeText={setSearchText}
             />
           </View>
-        </Section>
+        </Hero>
 
         <MenuFilter
           items={cats}

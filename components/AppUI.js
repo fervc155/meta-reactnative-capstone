@@ -24,7 +24,7 @@ const COLORS = {
   background: "#EDEFEE",
   surface: "#FFFFFF",
   text: "#333333",
-  muted: "#AFAFAF",
+  muted: "#eaeaeb",
   error: "#D32F2F",
 };
 

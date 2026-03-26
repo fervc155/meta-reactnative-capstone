@@ -14,10 +14,12 @@ import {
   Label,
   Input,
   Button,
+  SectionScroll,
 } from "../components/AppUI";
 
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Hero from "../components/Hero";
 
 export default function LoginScreen() {
   const { login } = useContext(AuthContext);
@@ -80,13 +82,24 @@ export default function LoginScreen() {
           />
         </View>
 
+        <Hero
+          img={false}
+          style={{
+            height: 100,
+            margin: 0,
+            paddingVertical: 0,
+            marginBottom: 0,
+          }}
+        />
         {/* Content */}
         <Section
           style={[styles.section, { flex: 1, justifyContent: "space-between" }]}
         >
           {/* Arriba */}
           <View>
-            <Title>Let us get to know you</Title>
+            <Title style={{ textAlign: "center", marginBottom: 10 }}>
+              Let us get to know you
+            </Title>
           </View>
 
           {/* Abajo (tus inputs tal cual) */}
@@ -125,14 +138,14 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   header: {
     alignItems: "center",
-    paddingVertical: 20,
+    paddingVertical: 5,
   },
   logo: {
     width: 200,
     height: 60,
   },
   footer: {
-    paddingVertical: 40,
+    paddingVertical: 30,
     paddingHorizontal: 20,
   },
 });

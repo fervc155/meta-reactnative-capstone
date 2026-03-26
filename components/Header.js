@@ -1,31 +1,48 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { COLORS } from "./AppUI";
 import Logo from "../assets/images/Logo.png";
 import Avatar from "./Avatar";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigation } from "@react-navigation/native"; // Importa useNavigation
 
 export default function Header({ onBack, back = true }) {
-  let [urlImage, setUrlImage] = useState(null);
+  const [urlImage, setUrlImage] = useState(null);
   const { user } = useContext(AuthContext);
+  const navigation = useNavigation(); // Obtén el hook de navegación
+  const [initials, setInitials] = useState("");
   useEffect(() => {
-    user && setUrlImage(user.imageUri);
+    if (user) {
+      setUrlImage(user.imageUri);
+      setInitials(
+        `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase(),
+      );
+    }
   }, [user]);
+
+  const navigateToProfile = () => {
+    navigation.navigate("Profile"); // Redirige al perfil
+  };
 
   return (
     <View style={styles.header}>
       {back ? (
-        <TouchableOpacity onPress={onBack} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={onBack ? onBack : navigation.goBack}
+          style={styles.backButton}
+        >
           <Text style={styles.backArrow}>←</Text>
         </TouchableOpacity>
       ) : (
-        <View> </View>
+        <View></View>
       )}
       <View style={styles.logoContainer}>
         <Image source={Logo} style={styles.logoImage} resizeMode="contain" />
         <Text style={styles.logoText}>L I T T L E L E M O N</Text>
       </View>
-      <Avatar uri={urlImage} size={40} />
+      <TouchableOpacity onPress={navigateToProfile}>
+        <Avatar uri={urlImage} size={40} initials={initials} />
+      </TouchableOpacity>
     </View>
   );
 }

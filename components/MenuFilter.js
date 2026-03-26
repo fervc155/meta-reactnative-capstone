@@ -24,7 +24,7 @@ export default function MenuFilter({ selected, onSelect, items }) {
           >
             <Label
               style={{
-                color: isActive ? COLORS.primary : COLORS.muted,
+                color: isActive ? COLORS.primary : COLORS.primary,
                 marginBottom: 0,
               }}
             >
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 20,
+    color: COLORS.white,
   },
   buttonSelected: {
     backgroundColor: COLORS.surface,

@@ -23,16 +23,14 @@ export default function RootNavigator() {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-
-      {/* {!isLogged ? (
+      {!isLogged ? (
         <Stack.Screen name="Login" component={LoginScreen} />
       ) : (
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
         </>
-      )} */}
+      )}
     </Stack.Navigator>
   );
 }

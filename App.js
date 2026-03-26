@@ -18,8 +18,6 @@ export default function App() {
 
   return (
     <AuthProvider>
-      {" "}
-      {/* 👈 envuelve aquí */}
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>

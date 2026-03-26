@@ -13,6 +13,7 @@ import {
 import Header from "../components/Header";
 import Avatar from "../components/Avatar";
 import { AuthContext } from "../context/AuthContext";
+import { useNavigation } from "@react-navigation/native"; // Importa useNavigation
 
 export default function ProfileScreen() {
   const { checkLogin, saveUser, logout } = useContext(AuthContext);
@@ -22,6 +23,8 @@ export default function ProfileScreen() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+
+  const navigation = useNavigation();
 
   // Imagen de perfil
   const [imageUri, setImageUri] = useState(null);
@@ -37,6 +40,11 @@ export default function ProfileScreen() {
   // Obtener iniciales
   const initials =
     `${firstName?.[0] || ""}${lastName?.[0] || ""}`.toUpperCase();
+
+  const onLogout = () => {
+    logout();
+    navigation.navigate("Login");
+  };
 
   // Cargar datos al iniciar
   useEffect(() => {
@@ -169,7 +177,7 @@ export default function ProfileScreen() {
         ))}
 
         {/* Logout */}
-        <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+        <TouchableOpacity style={styles.logoutBtn} onPress={onLogout}>
           <Text style={styles.logoutText}>Log out</Text>
         </TouchableOpacity>
 

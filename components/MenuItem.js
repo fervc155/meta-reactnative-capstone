@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   textContainer: { flex: 1, paddingRight: 12 },
   name: { fontWeight: "bold" },
-  description: { color: COLORS.muted, marginVertical: 4 },
+  description: { color: COLORS.primary, marginVertical: 4 },
   price: { marginTop: 6 },
   image: { width: 80, height: 80, borderRadius: 10 },
 });
